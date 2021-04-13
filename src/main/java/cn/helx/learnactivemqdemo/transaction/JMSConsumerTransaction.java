@@ -24,7 +24,7 @@ public class JMSConsumerTransaction {
         connection.start();
 
         //3 创建会话,此步骤有两个参数，第一个是否以事务的方式提交，第二个默认的签收方式
-        Session session = connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
         //4 创建队列
         Queue queue = session.createQueue(QUEUE_NAME);
@@ -38,14 +38,14 @@ public class JMSConsumerTransaction {
             textMessage = (TextMessage) consumer.receive(3000);
             if (null != textMessage){
                 System.out.println("消费者从MQ接受消息:"+textMessage.getText());
-//                textMessage.acknowledge();
+                textMessage.acknowledge();
             }else {
                 break;
             }
         }
 
         try {
-            session.commit();
+//            session.commit();
             System.out.println("接受消息完毕");
         }catch (Exception e){
             e.printStackTrace();
